@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bank.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bank-system</a> &gt; <a href="index.source.html" class="el_package">bank_system</a> &gt; <span class="el_source">Bank.java</span></div><h1>Bank.java</h1><pre class="source lang-java linenums">package bank_system;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Lớp đại diện cho Ngân hàng, quản lý danh sách khách hàng.
+ */
+public class Bank {
+<span class="nc" id="L16">    private static final Logger logger = LoggerFactory.getLogger(Bank.class);</span>
+    private List&lt;Customer&gt; customerList;
+
+<span class="nc" id="L19">    public Bank() {</span>
+<span class="nc" id="L20">        this.customerList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L21">    }</span>
+
+    public List&lt;Customer&gt; getCustomerList() {
+<span class="nc" id="L24">        return customerList;</span>
+    }
+
+    /**
+     * Thiết lập danh sách khách hàng mới cho ngân hàng.
+     *
+     * @param customerList Danh sách khách hàng.
+     */
+    public void setCustomerList(List&lt;Customer&gt; customerList) {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (customerList == null) {</span>
+<span class="nc" id="L34">            this.customerList = new ArrayList&lt;&gt;();</span>
+        } else {
+<span class="nc" id="L36">            this.customerList = customerList;</span>
+        }
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * Đọc dữ liệu khách hàng từ InputStream.
+     *
+     * @param inputStream Luồng dữ liệu đầu vào.
+     */
+    public void readCustomerList(InputStream inputStream) {
+<span class="nc" id="L46">        logger.info(&quot;Bắt đầu đọc dữ liệu khách hàng từ InputStream...&quot;);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (inputStream == null) {</span>
+<span class="nc" id="L48">            return;</span>
+        }
+
+<span class="nc" id="L51">        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {</span>
+            String line;
+<span class="nc" id="L53">            Customer currentCustomer = null;</span>
+
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            while ((line = reader.readLine()) != null) {</span>
+<span class="nc" id="L56">                line = line.trim();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                if (line.isEmpty()) {</span>
+<span class="nc" id="L58">                    continue;</span>
+                }
+
+<span class="nc" id="L61">                int lastSpaceIndex = line.lastIndexOf(' ');</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                if (lastSpaceIndex &gt; 0) {</span>
+<span class="nc" id="L63">                    String token = line.substring(lastSpaceIndex + 1).trim();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                    if (token.matches(&quot;\\d{9}&quot;)) {</span>
+<span class="nc" id="L65">                        String name = line.substring(0, lastSpaceIndex).trim();</span>
+<span class="nc" id="L66">                        currentCustomer = new Customer(Long.parseLong(token), name);</span>
+<span class="nc" id="L67">                        customerList.add(currentCustomer);</span>
+<span class="nc" id="L68">                        logger.debug(&quot;Đã thêm khách hàng: {}&quot;, name);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">                    } else if (currentCustomer != null) {</span>
+<span class="nc" id="L70">                        String[] parts = line.split(&quot;\\s+&quot;);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                        if (parts.length &gt;= 3) {</span>
+<span class="nc" id="L72">                            long accNum = Long.parseLong(parts[0]);</span>
+<span class="nc" id="L73">                            double balance = Double.parseDouble(parts[2]);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                            if (Account.CHECKING_TYPE.equals(parts[1])) {</span>
+<span class="nc" id="L75">                                currentCustomer.addAccount(new CheckingAccount(accNum, balance));</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                            } else if (Account.SAVINGS_TYPE.equals(parts[1])) {</span>
+<span class="nc" id="L77">                                currentCustomer.addAccount(new SavingsAccount(accNum, balance));</span>
+                            }
+                        }
+                    }
+                }
+<span class="nc" id="L82">            }</span>
+<span class="nc" id="L83">        } catch (Exception e) {</span>
+<span class="nc" id="L84">            logger.error(&quot;Đã xảy ra lỗi trong quá trình đọc dữ liệu: {}&quot;, e.getMessage(), e);</span>
+<span class="nc" id="L85">        }</span>
+<span class="nc" id="L86">    }</span>
+
+    /**
+     * Lấy thông tin khách hàng sắp xếp theo ID.
+     *
+     * @return Chuỗi thông tin khách hàng.
+     */
+    public String getCustomersInfoByIdOrder() {
+<span class="nc" id="L94">        Collections.sort(customerList, (c1, c2) -&gt;</span>
+<span class="nc" id="L95">                Long.compare(c1.getIdNumber(), c2.getIdNumber()));</span>
+
+<span class="nc" id="L97">        StringBuilder res = new StringBuilder();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        for (int i = 0; i &lt; customerList.size(); i++) {</span>
+<span class="nc" id="L99">            res.append(customerList.get(i).getCustomerInfo());</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if (i &lt; customerList.size() - 1) {</span>
+<span class="nc" id="L101">                res.append(&quot;\n&quot;);</span>
+            }
+        }
+<span class="nc" id="L104">        return res.toString();</span>
+    }
+
+    /**
+     * Lấy thông tin khách hàng sắp xếp theo Tên.
+     *
+     * @return Chuỗi thông tin khách hàng.
+     */
+    public String getCustomersInfoByNameOrder() {
+<span class="nc" id="L113">        List&lt;Customer&gt; sortedList = new ArrayList&lt;&gt;(customerList);</span>
+<span class="nc" id="L114">        Collections.sort(sortedList, (c1, c2) -&gt; {</span>
+<span class="nc" id="L115">            int nameCompare = c1.getFullName().compareTo(c2.getFullName());</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (nameCompare != 0) {</span>
+<span class="nc" id="L117">                return nameCompare;</span>
+            }
+<span class="nc" id="L119">            return Long.compare(c1.getIdNumber(), c2.getIdNumber());</span>
+        });
+
+<span class="nc" id="L122">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for (Customer c : sortedList) {</span>
+<span class="nc" id="L124">            sb.append(c.getCustomerInfo()).append(&quot;\n&quot;);</span>
+<span class="nc" id="L125">        }</span>
+<span class="nc" id="L126">        return sb.toString().trim();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

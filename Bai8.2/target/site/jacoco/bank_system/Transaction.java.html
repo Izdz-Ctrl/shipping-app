@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transaction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bank-system</a> &gt; <a href="index.source.html" class="el_package">bank_system</a> &gt; <span class="el_source">Transaction.java</span></div><h1>Transaction.java</h1><pre class="source lang-java linenums">package bank_system;
+
+import java.util.Locale;
+
+/**
+ * Lớp đại diện cho một giao dịch ngân hàng.
+ */
+public class Transaction {
+    public static final int TYPE_DEPOSIT_CHECKING = 1;
+    public static final int TYPE_WITHDRAW_CHECKING = 2;
+    public static final int TYPE_DEPOSIT_SAVINGS = 3;
+    public static final int TYPE_WITHDRAW_SAVINGS = 4;
+
+    private int type;
+    private double amount;
+    private double initialBalance;
+    private double finalBalance;
+
+    /**
+     * Khởi tạo một đối tượng giao dịch.
+     *
+     * @param type           Loại giao dịch.
+     * @param amount         Số tiền giao dịch.
+     * @param initialBalance Số dư ban đầu.
+     * @param finalBalance   Số dư sau giao dịch.
+     */
+<span class="nc" id="L27">    public Transaction(int type, double amount, double initialBalance, double finalBalance) {</span>
+<span class="nc" id="L28">        this.type = type;</span>
+<span class="nc" id="L29">        this.amount = amount;</span>
+<span class="nc" id="L30">        this.initialBalance = initialBalance;</span>
+<span class="nc" id="L31">        this.finalBalance = finalBalance;</span>
+<span class="nc" id="L32">    }</span>
+
+    public int getType() {
+<span class="nc" id="L35">        return type;</span>
+    }
+
+    public void setType(int type) {
+<span class="nc" id="L39">        this.type = type;</span>
+<span class="nc" id="L40">    }</span>
+
+    public double getAmount() {
+<span class="nc" id="L43">        return amount;</span>
+    }
+
+    public void setAmount(double amount) {
+<span class="nc" id="L47">        this.amount = amount;</span>
+<span class="nc" id="L48">    }</span>
+
+    public double getInitialBalance() {
+<span class="nc" id="L51">        return initialBalance;</span>
+    }
+
+    public void setInitialBalance(double initialBalance) {
+<span class="nc" id="L55">        this.initialBalance = initialBalance;</span>
+<span class="nc" id="L56">    }</span>
+
+    public double getFinalBalance() {
+<span class="nc" id="L59">        return finalBalance;</span>
+    }
+
+    public void setFinalBalance(double finalBalance) {
+<span class="nc" id="L63">        this.finalBalance = finalBalance;</span>
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * Trả về tên kiểu giao dịch dưới dạng chuỗi.
+     *
+     * @param transactionType Mã số kiểu giao dịch.
+     * @return Tên loại giao dịch.
+     */
+    public static String getTypeString(int transactionType) {
+<span class="nc bnc" id="L73" title="All 5 branches missed.">        switch (transactionType) {</span>
+            case TYPE_DEPOSIT_CHECKING:
+<span class="nc" id="L75">                return &quot;Nạp tiền vãng lai&quot;;</span>
+            case TYPE_WITHDRAW_CHECKING:
+<span class="nc" id="L77">                return &quot;Rút tiền vãng lai&quot;;</span>
+            case TYPE_DEPOSIT_SAVINGS:
+<span class="nc" id="L79">                return &quot;Nạp tiền tiết kiệm&quot;;</span>
+            case TYPE_WITHDRAW_SAVINGS:
+<span class="nc" id="L81">                return &quot;Rút tiền tiết kiệm&quot;;</span>
+            default:
+<span class="nc" id="L83">                return &quot;Không rõ&quot;;</span>
+        }
+    }
+
+    /**
+     * Sinh ra chuỗi tóm tắt thông tin của giao dịch.
+     *
+     * @return Chuỗi chứa chi tiết giao dịch.
+     */
+    public String getTransactionSummary() {
+<span class="nc" id="L93">        String typeStr = getTypeString(this.type);</span>
+<span class="nc" id="L94">        String initBalStr = String.format(Locale.US, &quot;%.2f&quot;, initialBalance);</span>
+<span class="nc" id="L95">        String amountStr = String.format(Locale.US, &quot;%.2f&quot;, amount);</span>
+<span class="nc" id="L96">        String finalBalStr = String.format(Locale.US, &quot;%.2f&quot;, finalBalance);</span>
+
+<span class="nc" id="L98">        return String.format(&quot;- Kiểu giao dịch: %s. Số dư ban đầu: $%s. Số tiền: $%s. Số dư cuối: $%s.&quot;,</span>
+                typeStr, initBalStr, amountStr, finalBalStr);
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
