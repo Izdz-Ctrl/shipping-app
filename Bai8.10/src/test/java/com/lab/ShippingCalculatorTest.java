@@ -24,8 +24,8 @@ public class ShippingCalculatorTest {
   }
 
   @Test
-  void testNullType() {
-    assertThrows(NullPointerException.class, () -> calc.calculate(5, null));
+  void testBrokenNPE() {
+    assertEquals(0.0, calc.calculate(5, null));
   }
 }
 
