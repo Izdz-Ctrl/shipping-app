@@ -24,8 +24,8 @@ public class ShippingCalculatorTest {
   }
 
   @Test
-  void testBrokenNPE() {
-    assertEquals(0.0, calc.calculate(5, null));
+  void testForceRed() {
+    assertEquals(1000000.0, calc.calculate(5, "STANDARD"));
   }
 }
 
